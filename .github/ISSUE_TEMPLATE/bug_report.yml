@@ -1,0 +1,67 @@
+# Nombre que aparece al elegir la plantilla en "New issue"
+name: Reporte de incidencia
+description: Registrar un error encontrado en RestaControl
+# Texto con el que empieza el titulo del issue
+title: "[BUG] "
+# Etiqueta que se pone sola al crear el issue
+labels: ["bug"]
+body:
+  - type: textarea
+    id: descripcion
+    attributes:
+      label: Descripción
+      description: Qué falla, en una o dos frases.
+    validations:
+      required: true
+
+  - type: dropdown
+    id: modulo
+    attributes:
+      label: Módulo afectado
+      options:
+        - Autenticación y usuarios
+        - Clientes y reservas
+        - Carta, platos y productos
+        - Mesas, pedidos y caja
+        - Dashboard y reportes
+    validations:
+      required: true
+
+  - type: dropdown
+    id: severidad
+    attributes:
+      label: Severidad propuesta
+      options:
+        - S1 Crítica (sistema caído o pérdida de datos)
+        - S2 Alta (un módulo no puede usarse)
+        - S3 Media (falla con alternativa disponible)
+        - S4 Baja (defecto visual o de texto)
+    validations:
+      required: true
+
+  - type: textarea
+    id: pasos
+    attributes:
+      label: Pasos para reproducir
+      value: |
+        1.
+        2.
+        3.
+    validations:
+      required: true
+
+  - type: textarea
+    id: esperado
+    attributes:
+      label: Resultado esperado
+
+  - type: textarea
+    id: obtenido
+    attributes:
+      label: Resultado obtenido
+
+  - type: textarea
+    id: evidencia
+    attributes:
+      label: Evidencia
+      description: Arrastra aquí una captura o pega el mensaje de error.
