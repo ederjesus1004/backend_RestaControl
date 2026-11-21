@@ -188,6 +188,10 @@ public class ReservaCrudService {
                 request.getCantidadPersonas(),
                 request.getEstado()
         );
+        // Una reserva nueva no puede quedar en una fecha que ya paso
+        if (request.getFechaHora().isBefore(LocalDateTime.now())) {
+            throw new IllegalArgumentException("La fecha y hora de la reserva no puede ser pasada");
+        }
         validarCruceHorario(request.getIdMesa(), request.getFechaHora(), null);
     }
 
@@ -232,14 +236,18 @@ public class ReservaCrudService {
         if (idMesa == null) {
             throw new IllegalArgumentException("La mesa es obligatoria");
         }
-        if (mesaRepository.findById(idMesa).isEmpty()) {
-            throw new IllegalArgumentException("Mesa no encontrada");
-        }
+        // Se guarda la mesa para poder comparar su capacidad mas abajo
+        Mesa mesa = mesaRepository.findById(idMesa)
+                .orElseThrow(() -> new IllegalArgumentException("Mesa no encontrada"));
         if (fechaHora == null) {
             throw new IllegalArgumentException("La fecha y hora es obligatoria");
         }
         if (cantidadPersonas == null || cantidadPersonas < 1) {
             throw new IllegalArgumentException("La cantidad de personas debe ser mayor a 0");
+        }
+        // La cantidad de personas no puede superar la capacidad de la mesa
+        if (mesa.getCapacidad() != null && cantidadPersonas > mesa.getCapacidad()) {
+            throw new IllegalArgumentException("La mesa solo tiene capacidad para " + mesa.getCapacidad() + " personas");
         }
         resolveEstado(estado);
     }
